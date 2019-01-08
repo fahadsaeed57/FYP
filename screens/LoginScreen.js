@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import { View, Text, ImageBackground, Animated, Dimensions, StyleSheet, Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-native-responsive-screen';
 const SCREEN_HEIGHT = Dimensions.get('window').height
-import Icon2 from 'react-native-vector-icons/AntDesign';
-import { Icon, Button } from 'native-base';
+import Icon2 from 'react-native-vector-icons/Entypo';
+import GradientButton from 'react-native-gradient-buttons';
+
 import * as Animatable from 'react-native-animatable';
 import Iconant from 'react-native-vector-icons/AntDesign';
+import { LinearGradient } from 'expo';
+import { Container, Header, Button, Content, Form, Item, Input, Label, Icon } from 'native-base';
 export default class LoginScreen extends Component {
 
     state = {
         margin: new Animated.Value(200),
-        marginLeft:new Animated.Value(dp('8%'))
+        marginLeft: new Animated.Value(dp('8%'))
     }
     componentWillMount() {
-        this.loginHeight = new Animated.Value(70)
-        
+        this.loginHeight = new Animated.Value(50)
+
     }
     componentDidMount() {
         Animated.timing(                  // Animate over time
@@ -30,15 +33,15 @@ export default class LoginScreen extends Component {
         Animated.timing(                  // Animate over time
             this.state.marginLeft,            // The animated value to drive
             {
-                toValue: dp('8%'),                   // Animate to opacity: 1 (opaque)
+                toValue: dp('10%'),                   // Animate to opacity: 1 (opaque)
                 duration: 200,              // Make it take a while
             }
-        ).start(); 
+        ).start();
         Animated.timing(this.loginHeight, {
-            toValue: SCREEN_HEIGHT/1.75,
-            duration: 400,
+            toValue: SCREEN_HEIGHT / 1.75,
+            duration: 300,
         }).start(() => {
-            
+
             // this.refs.textInputMobile.focus()
         })
     }
@@ -47,17 +50,17 @@ export default class LoginScreen extends Component {
         Animated.timing(                  // Animate over time
             this.state.marginLeft,            // The animated value to drive
             {
-                toValue: dp('68%'),                   // Animate to opacity: 1 (opaque)
-                duration: 200, 
-                             // Make it take a while
+                toValue: Platform.OS === 'ios' ? dp('64%') : dp('65%'),                   // Animate to opacity: 1 (opaque)
+                duration: 200,
+                // Make it take a while
             }
-        ).start(); 
+        ).start();
         Animated.timing(this.loginHeight, {
-            toValue: SCREEN_HEIGHT/1.5,
-            duration: 400,
+            toValue: SCREEN_HEIGHT / 1.5,
+            duration: 300,
         }).start(() => {
 
-           
+
         })
     }
     render() {
@@ -66,21 +69,27 @@ export default class LoginScreen extends Component {
             outputRange: [0, 10]
         })
         const barOpacity = this.loginHeight.interpolate({
-            inputRange: [150, SCREEN_HEIGHT/1.75],
+            inputRange: [150, SCREEN_HEIGHT / 1.75],
             outputRange: [0, 1]
         })
         const highLightMargin = this.loginHeight.interpolate({
-            inputRange: [SCREEN_HEIGHT/1.75, SCREEN_HEIGHT/1.5],
-            outputRange: [hp('46%'), (SCREEN_HEIGHT/1.8)]
+            inputRange: [SCREEN_HEIGHT / 1.75, SCREEN_HEIGHT / 1.5],
+            outputRange: [hp('48%'), (SCREEN_HEIGHT / 1.75)]
         })
-        const textOpacity = this.loginHeight.interpolate({
-            inputRange: [SCREEN_HEIGHT/1.75, SCREEN_HEIGHT/1.5],
-            outputRange: [0.7,1]
+        const signUpOpacity = this.loginHeight.interpolate({
+            inputRange: [SCREEN_HEIGHT / 1.75, SCREEN_HEIGHT / 1.5],
+            outputRange: [0, 1]
+        })
+        const signInOpacity = this.loginHeight.interpolate({
+            inputRange: [SCREEN_HEIGHT / 1.75, SCREEN_HEIGHT / 1.5],
+            outputRange: [1, 0]
         })
        
+
         return (
 
-            <ImageBackground source={require('../assets/bg.jpg')} style={styles.container}>
+            <LinearGradient
+                colors={['#6666ff', '#9966ff']} style={styles.container}>
 
                 <Animated.View style={{
                     flex: 1,
@@ -93,49 +102,118 @@ export default class LoginScreen extends Component {
                 </Animated.View>
                 <Animatable.View animation="slideInUp" iterationCount={1}>
 
+
                     <Animated.View
                         style={{
                             height: this.loginHeight,//animated
-                            backgroundColor: '#527478',
-
-
-
+                            backgroundColor: '#E6EAE2'
                         }}>
 
-                        <Animated.View style={{ marginTop: marginTop ,padding:10,flex:1,flexDirection:'row'}}>
-                            <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{marginLeft:dp('7%')}} >
-                                <Animated.Text style={{color: '#DDEBEC', fontSize: hp('3.5%') }}>LOGIN</Animated.Text>
+                        <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 5, flex: 1, flexDirection: 'row', }}>
+                            <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{ marginLeft: dp('7%') }} >
+                                <Animated.Text style={{ color: '#6666ff', fontSize: hp('3.5%') }}>LOGIN</Animated.Text>
 
-                                
-                                
-                            </Button>
-                            <Text style={{marginTop:hp('2%'),marginLeft:dp('15%')}}> OR </Text>
-                            
-                            <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} style={{paddingHorizontal:dp('15%')}}>
-                                <Animated.Text style={{  color: '#DDEBEC', fontSize: hp('3.5%') }}>SIGN UP</Animated.Text>
 
-                                
 
                             </Button>
-                            
-                        </Animated.View>
-                        <Animated.View style={{justifyContent:'flex-end'}} >
-                        </Animated.View>
-                        <Animated.View style={{justifyContent:'flex-start',alignItems:'center',marginBottom:highLightMargin,backgroundColor:'white',height:5,width:dp('25%'),marginLeft:this.state.marginLeft,opacity:barOpacity}}>
-                            <Iconant active style={{color:'white'}} name='caretdown' />
+                            <Text style={{ marginTop: hp('2%'), color: '#6666ff', marginLeft: dp('15%') }}> OR </Text>
+
+                            <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} style={{ paddingHorizontal: dp('15%') }}>
+                                <Animated.Text style={{ color: '#6666ff', fontSize: hp('3.5%') }}>SIGN UP</Animated.Text>
+
+
+
+                            </Button>
+
                         </Animated.View>
 
-                       
-                        
-                       
-                       
+                        <Animated.View style={{ height: this.loginHeight - 100, margin: 5, backgroundColor: 'white', opacity: barOpacity,borderRadius:20 }}>
+
+
+                            <Animated.View style={{ marginBottom: highLightMargin, alignItems: 'center', height: 2, width: dp('20%'), marginLeft: this.state.marginLeft, opacity: barOpacity }}>
+                                <Iconant style={{ color: 'white', marginTop: -hp('1%') }} name='caretup' />
+
+                            </Animated.View>
+
+                            <Animated.View style={{ margin: 10, alignItems: 'center', justifyContent:'center',opacity: barOpacity, width: dp('90%'), position: 'absolute' }}>
+                                <Item>
+                                    <Icon active name='person' />
+                                    <Input placeholder='university ID' />
+                                </Item>
+                                <Item>
+                                    <Icon active name='key' />
+                                    <Input placeholder='password' />
+                                </Item>
+                                
+                                <Animated.View  style={{opacity:signUpOpacity,width:dp('90%'),zIndex:signUpOpacity,alignItems:'center'}}>
+                                <Item>
+                                    <Icon active name='person' />
+                                    <Input placeholder='university ID' />
+                                </Item>
+                                <Item>
+                                    <Icon active name='key' />
+                                    <Input placeholder='password' />
+                                </Item>
+                                <GradientButton
+                                    style={{ marginVertical: 8,marginTop:20 }}
+                                    textSyle={{ fontSize:5 }}
+                                    gradientBegin="#6666ff"
+                                    gradientEnd="#9966ff"
+                                    gradientDirection="diagonal"
+                                    height={60}
+                                    width={200}
+                                    radius={30}
+                                    onPressAction={() => alert('You pressed me!')}
+                                >
+                                   <Text style={{fontSize:17}}> SIGN UP</Text>
+                                </GradientButton>
+                                </Animated.View>
+                                <Animated.View style={{opacity:signInOpacity,position:'absolute',zIndex:signInOpacity,paddingTop:50}}>
+                                <GradientButton
+                                    style={{ marginVertical: 8 }}
+                                    textSyle={{ fontSize:5 }}
+                                    gradientBegin="#6666ff"
+                                    gradientEnd="#9966ff"
+                                    gradientDirection="diagonal"
+                                    height={60}
+                                    width={200}
+                                    radius={30}
+                                    onPressAction={() => alert('You pressed me!')}
+                                >
+                                   <Text style={{fontSize:17}}> LOGIN</Text>
+                                </GradientButton>
+                                <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} >
+                                <Text style={{ color: '#6666ff', fontSize: hp('3%') }}>Already a member ? Sign Up</Text>
+
+
+
+                            </Button>
+                                </Animated.View>
+                                
+                            </Animated.View>
+
+
+
+
+                        </Animated.View>
+
+
+
+
+
+
+
+
+
+
 
                     </Animated.View>
 
 
                 </Animatable.View>
 
-            </ImageBackground>
+
+            </LinearGradient>
 
         )
     }
