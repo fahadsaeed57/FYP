@@ -1,23 +1,46 @@
 import React, { Component } from 'react';
-import { View, Text, ImageBackground, Animated, Dimensions, StyleSheet, Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ImageBackground, Animated, Dimensions,ScrollView, StyleSheet, Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-native-responsive-screen';
 const SCREEN_HEIGHT = Dimensions.get('window').height
 import Icon2 from 'react-native-vector-icons/Entypo';
 import GradientButton from 'react-native-gradient-buttons';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Animatable from 'react-native-animatable';
 import Iconant from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo';
 import { Container, Header, Button, Content, Form, Item, Input, Label, Icon } from 'native-base';
 export default class LoginScreen extends Component {
-
+    static navigationOptions = {
+        header : null
+    }
     state = {
         margin: new Animated.Value(200),
         marginLeft: new Animated.Value(dp('8%'))
     }
     componentWillMount() {
         this.loginHeight = new Animated.Value(50)
+        this.scrollviewHeight = new Animated.Value(0)
+        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow)
 
+        this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide)
+
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardWillShow)
+
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardWillHide)
+
+    }
+    keyboardWillShow = (event) => {
+        Animated.timing(this.scrollviewHeight,{
+            toValue:event.endCoordinates.height-100,
+            duration:200 
+        }).start();
+    }
+
+    keyboardWillHide = (event) => {
+        Animated.timing(this.scrollviewHeight,{
+            toValue:0,
+            duration:200
+        }).start();
     }
     componentDidMount() {
         Animated.timing(                  // Animate over time
@@ -63,6 +86,9 @@ export default class LoginScreen extends Component {
 
         })
     }
+    componentWillUnmount(){
+        Keyboard.removeAllListeners();
+    }
     render() {
         const marginTop = this.loginHeight.interpolate({
             inputRange: [150, SCREEN_HEIGHT],
@@ -87,7 +113,8 @@ export default class LoginScreen extends Component {
        
 
         return (
-
+            
+            
             <LinearGradient
                 colors={['#6666ff', '#9966ff']} style={styles.container}>
 
@@ -100,26 +127,27 @@ export default class LoginScreen extends Component {
                 }}>
                     <Text style={{ color: 'white', fontSize: 40, fontWeight: 'bold' }} >ATTENDEE</Text>
                 </Animated.View>
-                <Animatable.View animation="slideInUp" iterationCount={1}>
+                
 
 
                     <Animated.View
                         style={{
                             height: this.loginHeight,//animated
-                            backgroundColor: '#E6EAE2'
+                            backgroundColor: '#E6EAE2',
+                            marginBottom:this.scrollviewHeight
                         }}>
 
-                        <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 5, flex: 1, flexDirection: 'row', }}>
-                            <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{ marginLeft: dp('7%') }} >
-                                <Animated.Text style={{ color: '#6666ff', fontSize: hp('3.5%') }}>LOGIN</Animated.Text>
+                        <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 0, flex: 1, flexDirection: 'row', }}>
+                            <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{ marginLeft: dp('8.5%') }} >
+                                <Animatable.Text animation="slideInLeft" iterationCount={1} style={{ color: '#6666ff', fontSize: hp('3.5%') }}>LOGIN</Animatable.Text>
 
 
 
                             </Button>
-                            <Text style={{ marginTop: hp('2%'), color: '#6666ff', marginLeft: dp('15%') }}> OR </Text>
+                            <Animatable.Text animation="zoomIn" iterationCount={1} style={{ marginTop: hp('2%'), color: '#6666ff', marginLeft: dp('15%') }}> OR </Animatable.Text>
 
                             <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} style={{ paddingHorizontal: dp('15%') }}>
-                                <Animated.Text style={{ color: '#6666ff', fontSize: hp('3.5%') }}>SIGN UP</Animated.Text>
+                                <Animatable.Text animation="slideInRight" iterationCount={1} style={{ color: '#6666ff', fontSize: hp('3.5%') }}>SIGN UP</Animatable.Text>
 
 
 
@@ -134,16 +162,14 @@ export default class LoginScreen extends Component {
                                 <Iconant style={{ color: 'white', marginTop: -hp('1%') }} name='caretup' />
 
                             </Animated.View>
-
+                            
                             <Animated.View style={{ margin: 10, alignItems: 'center', justifyContent:'center',opacity: barOpacity, width: dp('90%'), position: 'absolute' }}>
+                            
                                 <Item>
                                     <Icon active name='person' />
                                     <Input placeholder='university ID' />
                                 </Item>
-                                <Item>
-                                    <Icon active name='key' />
-                                    <Input placeholder='password' />
-                                </Item>
+                        
                                 
                                 <Animated.View  style={{opacity:signUpOpacity,width:dp('90%'),zIndex:signUpOpacity,alignItems:'center'}}>
                                 <Item>
@@ -157,31 +183,34 @@ export default class LoginScreen extends Component {
                                 <GradientButton
                                     style={{ marginVertical: 8,marginTop:20 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#6666ff"
-                                    gradientEnd="#9966ff"
+                                    gradientBegin="#9966ff"
+                                    gradientEnd="#99BDFD"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
                                     radius={30}
-                                    onPressAction={() => alert('You pressed me!')}
+                                    onPressAction={() => { Keyboard.dismiss(); this.props.navigation.navigate('SignUpFacial') ;}}
                                 >
                                    <Text style={{fontSize:17}}> SIGN UP</Text>
                                 </GradientButton>
+
                                 </Animated.View>
                                 <Animated.View style={{opacity:signInOpacity,position:'absolute',zIndex:signInOpacity,paddingTop:50}}>
                                 <GradientButton
                                     style={{ marginVertical: 8 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#6666ff"
-                                    gradientEnd="#9966ff"
+                                    gradientBegin="#9966ff"
+                                    gradientEnd="#99BDFD"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
                                     radius={30}
-                                    onPressAction={() => alert('You pressed me!')}
+                                    onPressAction={() => {Keyboard.dismiss(); this.props.navigation.navigate('LoginFacial') ;}}
                                 >
                                    <Text style={{fontSize:17}}> LOGIN</Text>
                                 </GradientButton>
+                                
+                                
                                 <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} >
                                 <Text style={{ color: '#6666ff', fontSize: hp('3%') }}>Already a member ? Sign Up</Text>
 
@@ -210,10 +239,11 @@ export default class LoginScreen extends Component {
                     </Animated.View>
 
 
-                </Animatable.View>
+                
 
-
+                       
             </LinearGradient>
+           
 
         )
     }
