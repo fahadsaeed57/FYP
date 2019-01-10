@@ -117,7 +117,7 @@ export default class LoginScreen extends Component {
             
             <LinearGradient
                 colors={['#6666ff', '#9966ff']} style={styles.container}>
-
+                <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}>
                 <Animated.View style={{
                     flex: 1,
                     backgroundColor: 'transparent',
@@ -134,10 +134,11 @@ export default class LoginScreen extends Component {
                         style={{
                             height: this.loginHeight,//animated
                             backgroundColor: '#E6EAE2',
-                            marginBottom:this.scrollviewHeight
+                            marginBottom:this.scrollviewHeight,
+                            opacity:1,
                         }}>
 
-                        <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 0, flex: 1, flexDirection: 'row', }}>
+                        <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 0, flex: 1, flexDirection: 'row',opacity:1, }}>
                             <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{ marginLeft: dp('8.5%') }} >
                                 <Animatable.Text animation="slideInLeft" iterationCount={1} style={{ color: '#6666ff', fontSize: hp('3.5%') }}>LOGIN</Animatable.Text>
 
@@ -159,7 +160,7 @@ export default class LoginScreen extends Component {
 
 
                             <Animated.View style={{ marginBottom: highLightMargin, alignItems: 'center', height: 2, width: dp('20%'), marginLeft: this.state.marginLeft, opacity: barOpacity }}>
-                                <Iconant style={{ color: 'white', marginTop: -hp('1%') }} name='caretup' />
+                                <Iconant style={{ color: 'white', marginTop: -hp('1%') ,opacity:1}} name='caretup' />
 
                             </Animated.View>
                             
@@ -241,7 +242,7 @@ export default class LoginScreen extends Component {
 
                 
 
-                       
+                    </ImageBackground>   
             </LinearGradient>
            
 
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'transparent',
         padding: 0,
-
+        
 
 
     }
