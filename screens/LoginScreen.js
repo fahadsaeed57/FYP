@@ -116,7 +116,7 @@ export default class LoginScreen extends Component {
             
             
             <LinearGradient
-            colors={['#a27ff8', '#a989fb']}  style={styles.container}>
+                colors={['#494871', '#494871']} style={styles.container}>
                 {/* <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}> */}
                 <Animated.View style={{
                     flex: 1,
@@ -184,8 +184,8 @@ export default class LoginScreen extends Component {
                                 <GradientButton
                                     style={{ marginVertical: 8,marginTop:20 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#9966ff"
-                                    gradientEnd="#99BDFD"
+                                    gradientBegin="#494871"
+                                    gradientEnd="#494871"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
@@ -200,8 +200,8 @@ export default class LoginScreen extends Component {
                                 <GradientButton
                                     style={{ marginVertical: 8 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#9966ff"
-                                    gradientEnd="#99BDFD"
+                                    gradientBegin="#494871"
+                                    gradientEnd="#494871"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
@@ -213,7 +213,7 @@ export default class LoginScreen extends Component {
                                 
                                 
                                 <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} >
-                                <Text style={{ color: '#6666ff', fontSize: hp('3%') }}>Already a member ? Sign Up</Text>
+                                <Text style={{ color: '#494871', fontSize: hp('3%') }}>Already a member ? Sign Up</Text>
 
 
 

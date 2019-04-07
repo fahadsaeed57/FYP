@@ -45,34 +45,8 @@ export default class AuthLoadingScreen extends Component{
           };
         return(
             <LinearGradient
-                colors={['#a27ff8', '#a989fb']} style={styles.container}>
-               <Animated.View style={[styles.ring, truckStyle]}>
-          <Animated.Image
-            source={require('../assets/FYPLOGO.png')}
-            style={[
-              {
-                resizeMode: "contain",
-                width: 100,
-                height: 100
-              }
-            ]}
-          />
-</Animated.View>
-
-<Animated.View
-     style={[
-            {
-              position: "absolute",
-              bottom: 20,
-              width: Dimensions.get('window').width / 2,
-              height: 4,
-              backgroundColor: "#fff",
-              borderRadius: 2
-            },
-            scaleText
-        ]}
-/>
-            
+                colors={['#494871', '#494871']} style={styles.container}>
+               <ActivityIndicator color="white"></ActivityIndicator>
             </LinearGradient>
             
         )
@@ -83,7 +57,7 @@ const styles = StyleSheet.create({
         flex :1,
         alignItems:'center',
         justifyContent : 'center',
-        backgroundColor:'#5E7A7C'
+        backgroundColor:'#494871'
     }
 
 })

@@ -133,19 +133,19 @@ export default class SignUpFacial extends Component{
 
           return (
             <LinearGradient
-            colors={['#a27ff8', '#a989fb']}  style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
+            colors={['#494871', '#494871']}  style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
           } else {
         if(image !=null && imagecropped == null){
             return (
                 <LinearGradient
-                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
+                colors={['#494871', '#494871']}  style={styles.container}>
                     <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
                     <Image source={{ uri: image }} style={{ width: dp('90%'), height: hp('40%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
                     <GradientButton
                                     style={{ marginVertical: 8,marginTop:20 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#9966ff"
-                                    gradientEnd="#99BDFD"
+                                    gradientBegin="#494871"
+                                    gradientEnd="#494871"
                                     gradientDirection="diagonal"
                                     height={50}
                                     width={200}
@@ -157,8 +157,8 @@ export default class SignUpFacial extends Component{
                                 <GradientButton
                                     style={{ marginVertical: 8,marginTop:20 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#9966ff"
-                                    gradientEnd="#99BDFD"
+                                    gradientBegin="#494871"
+                                    gradientEnd="#494871"
                                     gradientDirection="diagonal"
                                     height={50}
                                     width={200}
@@ -178,7 +178,7 @@ export default class SignUpFacial extends Component{
         if(imagecropped!=null){
             return (
                 <LinearGradient
-                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
+                colors={['#494871', '#494871']}  style={styles.container}>
                 <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
                 <Image source={{ uri: imagecropped }} style={{ width: dp('90%'), height: hp('60%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
                 </View>
@@ -188,11 +188,11 @@ export default class SignUpFacial extends Component{
         else{
             return(
                 <LinearGradient
-                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
+                colors={['#494871', '#494871']}  style={styles.container}>
                     <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center',justifyContent:'center'}}>
                     <TouchableOpacity transparent onPress={this._pickImage} >
                             <Icon active size={hp('30%')} name='photo-camera' />
-                            <Text style={{color:'#6666ff',textAlign:'center',fontSize:hp('3%')}}> Take Your Picture ! </Text>
+                            <Text style={{color:'#494871',textAlign:'center',fontSize:hp('3%')}}> Take Your Picture ! </Text>
                     </TouchableOpacity>
                     </View>
                 </LinearGradient>

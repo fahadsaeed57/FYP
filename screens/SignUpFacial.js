@@ -20,7 +20,7 @@ export default class LoginFacial extends Component{
     render(){
         return(
             <LinearGradient
-            colors={['#a27ff8', '#a989fb']} style={styles.container}>
+                colors={['#494871', '#494871']} style={styles.container}>
                 <Text style={{color:'white'}}> SignUp FACIAL </Text>
             </LinearGradient>
             
