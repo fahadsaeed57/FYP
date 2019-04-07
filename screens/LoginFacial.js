@@ -133,12 +133,12 @@ export default class SignUpFacial extends Component{
 
           return (
             <LinearGradient
-            colors={['#6666ff', '#9966ff']} style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
+            colors={['#a27ff8', '#a989fb']}  style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
           } else {
         if(image !=null && imagecropped == null){
             return (
                 <LinearGradient
-                    colors={['#6666ff', '#9966ff']} style={styles.container}>
+                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
                     <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
                     <Image source={{ uri: image }} style={{ width: dp('90%'), height: hp('40%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
                     <GradientButton
@@ -178,7 +178,7 @@ export default class SignUpFacial extends Component{
         if(imagecropped!=null){
             return (
                 <LinearGradient
-                colors={['#6666ff', '#9966ff']} style={styles.container}>
+                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
                 <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
                 <Image source={{ uri: imagecropped }} style={{ width: dp('90%'), height: hp('60%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
                 </View>
@@ -188,7 +188,7 @@ export default class SignUpFacial extends Component{
         else{
             return(
                 <LinearGradient
-                    colors={['#6666ff', '#9966ff']} style={styles.container}>
+                colors={['#a27ff8', '#a989fb']}  style={styles.container}>
                     <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center',justifyContent:'center'}}>
                     <TouchableOpacity transparent onPress={this._pickImage} >
                             <Icon active size={hp('30%')} name='photo-camera' />

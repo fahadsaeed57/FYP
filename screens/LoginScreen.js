@@ -116,7 +116,7 @@ export default class LoginScreen extends Component {
             
             
             <LinearGradient
-                colors={['#6666ff', '#9966ff']} style={styles.container}>
+            colors={['#a27ff8', '#a989fb']}  style={styles.container}>
                 {/* <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}> */}
                 <Animated.View style={{
                     flex: 1,
