@@ -1,7 +1,7 @@
 
 import React , {Component} from 'react';
-import {View,Text,StyleSheet,AsyncStorage,TouchableOpacity,Image,Alert,ImageBackground,StatusBar,ToastAndroid,Platform} from 'react-native';
-import {LinearGradient,ImagePicker,Permissions,FaceDetector} from 'expo';
+import {View,Text,StyleSheet,AsyncStorage,Platform,TouchableOpacity,Image,Alert} from 'react-native';
+import {LinearGradient,ImagePicker,Permissions,FaceDetector,Constants} from 'expo';
 import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Loader from '../components/Loader';
@@ -11,6 +11,7 @@ export default class SignUpFacial extends Component{
         image: null,
         hasCameraPermission: null,
         isLoading:false,
+        imagecropped : null,
       };
     constructor(props){
         super(props);
@@ -38,26 +39,94 @@ export default class SignUpFacial extends Component{
       };
       detectFaces = async (imageUri) => {
         const options = { mode: FaceDetector.Constants.Mode.fast ,detectLandmarks : FaceDetector.Constants.Mode.all ,runClassifications:FaceDetector.Constants.Mode.all};
-        this.setState({isLoading:true})
+        
+        if(Platform.OS==='ios'){
+            this.setState({isLoading:false})
+        }
+        if(Platform.OS==='android'){
+            this.setState({isLoading:true})
+        }
         return await FaceDetector.detectFacesAsync(imageUri, options);
-      };
+      }
+       uploadImageAsync = async (uri,faceobject)=> {
+        
+        let apiUrl = 'https://pythonface.herokuapp.com/upload';
+        let uriParts = uri.split('.');
+        let fileType = uriParts[uriParts.length - 1];
+      
+        let formData = new FormData();
+        formData.append('image', {
+          uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+           const data = {
+                width : faceobject.bounds.size.width,
+                height: faceobject.bounds.size.height,
+                x: faceobject.bounds.origin.x,
+                y: faceobject.bounds.origin.y,
+    
+            }
+         formData.append('data',JSON.stringify(data));
+         console.log(JSON.stringify(data))
+        let options = {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "multipart/form-data",
+             
+         
+          },
+        };
+      
+        return fetch(apiUrl, options);
+      }
       onDetect = async () => {
         
         let detected = await this.detectFaces(this.state.image)
-        this.setState({isLoading:false})
-
+        
+    
         if(detected.faces.length === 0){
+            
             Alert.alert('Error','sorry unable to detect face. Try Again');
+            this.setState({isLoading:false})
         }
         else if(detected.faces.length >1){
+            
             Alert.alert('Error','more than one face detected. Please Try Again with one face');
+            this.setState({isLoading:false})
         }
         else{
-            Alert.alert( 'Face Position',''+ JSON.stringify(detected.faces[0]))
+            try {
+               
+                if(Platform.OS==='ios'){
+                    this.setState({isLoading:true})
+                }
+                
+                 let uploadResponse = await this.uploadImageAsync(this.state.image,detected.faces[0]);
+                let uploadResult = await uploadResponse.json();
+                
+                  this.setState({
+                    imagecropped: `data:image/jpg;base64,${uploadResult.base64img.data}`
+                  });
+                console.log(JSON.stringify(uploadResult.base64img.data));
+              } catch (e) {
+                
+                console.log({ e });
+                Alert.alert('Error','Upload failed, Check your Internet Connection');
+              } finally {
+                this.setState({
+                  isLoading: false
+                });
+
+              }
+            // Alert.alert( 'Face Position',''+ JSON.stringify(detected.faces[0]))
         }
       }
+     
     render(){
-        let { image ,hasCameraPermission} = this.state;
+        let { image ,hasCameraPermission,imagecropped} = this.state;
         if (hasCameraPermission === null) {
             return <View />;
           } else if (hasCameraPermission === false) {
@@ -66,7 +135,7 @@ export default class SignUpFacial extends Component{
             <LinearGradient
             colors={['#6666ff', '#9966ff']} style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
           } else {
-        if(image){
+        if(image !=null && imagecropped == null){
             return (
                 <LinearGradient
                     colors={['#6666ff', '#9966ff']} style={styles.container}>
@@ -103,6 +172,16 @@ export default class SignUpFacial extends Component{
                             modalVisible={this.state.isLoading}
                             animationType="slide"
                         /> }
+                </LinearGradient>
+            )
+        }
+        if(imagecropped!=null){
+            return (
+                <LinearGradient
+                colors={['#6666ff', '#9966ff']} style={styles.container}>
+                <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
+                <Image source={{ uri: imagecropped }} style={{ width: dp('90%'), height: hp('60%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
+                </View>
                 </LinearGradient>
             )
         }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ImageBackground, Animated, Dimensions,ScrollView, StyleSheet, Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-native-responsive-screen';
-const SCREEN_HEIGHT = Dimensions.get('window').height
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 import Icon2 from 'react-native-vector-icons/Entypo';
 import GradientButton from 'react-native-gradient-buttons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -117,7 +117,7 @@ export default class LoginScreen extends Component {
             
             <LinearGradient
                 colors={['#6666ff', '#9966ff']} style={styles.container}>
-                <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}>
+                {/* <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}> */}
                 <Animated.View style={{
                     flex: 1,
                     backgroundColor: 'transparent',
@@ -133,22 +133,22 @@ export default class LoginScreen extends Component {
                     <Animated.View
                         style={{
                             height: this.loginHeight,//animated
-                            backgroundColor: '#E6EAE2',
+                           
                             marginBottom:this.scrollviewHeight,
                             opacity:1,
                         }}>
 
                         <Animated.View style={{ marginTop: marginTop, paddingHorizontal: Platform.OS === 'ios' ? 20 : 0, flex: 1, flexDirection: 'row',opacity:1, }}>
                             <Button transparent onPress={() => { this.increaseHeightOfLogin() }} style={{ marginLeft: dp('8.5%') }} >
-                                <Animatable.Text animation="slideInLeft" iterationCount={1} style={{ color: '#6666ff', fontSize: hp('3.5%') }}>LOGIN</Animatable.Text>
+                                <Animatable.Text animation="slideInLeft" iterationCount={1} style={{ color: 'white', fontSize: hp('3.5%') }}>LOGIN</Animatable.Text>
 
 
 
                             </Button>
-                            <Animatable.Text animation="zoomIn" iterationCount={1} style={{ marginTop: hp('2%'), color: '#6666ff', marginLeft: dp('15%') }}> OR </Animatable.Text>
+                            <Animatable.Text animation="zoomIn" iterationCount={1} style={{ marginTop: hp('2%'), color: 'white', marginLeft: dp('15%') }}> OR </Animatable.Text>
 
                             <Button transparent onPress={() => { this.increaseHeightOfSignUp() }} style={{ paddingHorizontal: dp('15%') }}>
-                                <Animatable.Text animation="slideInRight" iterationCount={1} style={{ color: '#6666ff', fontSize: hp('3.5%') }}>SIGN UP</Animatable.Text>
+                                <Animatable.Text animation="slideInRight" iterationCount={1} style={{ color: 'white', fontSize: hp('3.5%') }}>SIGN UP</Animatable.Text>
 
 
 
@@ -242,7 +242,7 @@ export default class LoginScreen extends Component {
 
                 
 
-                    </ImageBackground>   
+                    {/* </ImageBackground>    */}
             </LinearGradient>
            
 
