@@ -8,28 +8,35 @@ export default class AuthLoadingScreen extends Component{
     }
     constructor(props){
         super(props)
-        setTimeout(()=>this.loadApp(),4000);
-        this.animatedValue = new Animated.Value(0.5);
-        this.animatedValue2 = new Animated.Value(0);
+      
         // this._isMounted = false;
     }
+
+    componentWillMount(){
+        
+        this._isMounted = false;
+        this.animatedValue = new Animated.Value(0.5);
+        this.animatedValue2 = new Animated.Value(0);
+    }
     componentDidMount(){
+        setTimeout(()=>this.loadApp(),3000);
+        this._isMounted = true;
         Animated.spring(this.animatedValue, {
             toValue: 1,
             friction: 4,
-            delay: 2500,
+            delay: 1000,
            useNativeDriver: true,
           }).start();
       
           Animated.timing(this.animatedValue2, {
             toValue: 1,
-            delay: 200,
+            delay: 100,
             duration: 3000,
            useNativeDriver: true,
           }).start();
     }
     componentWillUnmount(){
-        // this.isCancelled = true;
+        this.isCancelled = true;
     }
     loadApp = async() =>{
         const userToken =  await AsyncStorage.getItem("userToken");
@@ -46,7 +53,32 @@ export default class AuthLoadingScreen extends Component{
         return(
             <LinearGradient
                 colors={['#494871', '#494871']} style={styles.container}>
-               <ActivityIndicator color="white"></ActivityIndicator>
+               <Animated.View style={[truckStyle]}>
+          <Animated.Image
+            source={require("../assets/fyplogo.png")}
+            style={[
+              {
+                resizeMode: "contain",
+                width: 100,
+                height: 100
+              }
+            ]}
+          />
+</Animated.View>
+
+<Animated.View
+     style={[
+            {
+              position: "absolute",
+              bottom: 20,
+              width: Dimensions.get('window').width / 2,
+              height: 4,
+              backgroundColor: "#fff",
+              borderRadius: 2
+            },
+            scaleText
+        ]}
+/>
             </LinearGradient>
             
         )
