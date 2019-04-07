@@ -8,7 +8,7 @@ export default class AuthLoadingScreen extends Component{
     }
     constructor(props){
         super(props)
-        setTimeout(()=>this.loadApp(),100);
+        setTimeout(()=>this.loadApp(),3000);
         // this._isMounted = false;
     }
     componentDidMount(){
@@ -25,6 +25,7 @@ export default class AuthLoadingScreen extends Component{
         this.props.navigation.navigate(userToken ? 'Auth' : 'Auth')
     }
     render(){
+        
         return(
             <LinearGradient
                 colors={['#6666ff', '#9966ff']} style={styles.container}>

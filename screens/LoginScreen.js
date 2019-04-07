@@ -57,12 +57,12 @@ export default class LoginScreen extends Component {
             this.state.marginLeft,            // The animated value to drive
             {
                 toValue: dp('10%'),                   // Animate to opacity: 1 (opaque)
-                duration: 200,              // Make it take a while
+                duration: 100,              // Make it take a while
             }
         ).start();
         Animated.timing(this.loginHeight, {
             toValue: SCREEN_HEIGHT / 1.75,
-            duration: 300,
+            duration: 100,
         }).start(() => {
 
             // this.refs.textInputMobile.focus()
@@ -74,13 +74,13 @@ export default class LoginScreen extends Component {
             this.state.marginLeft,            // The animated value to drive
             {
                 toValue: Platform.OS === 'ios' ? dp('64%') : dp('65%'),                   // Animate to opacity: 1 (opaque)
-                duration: 200,
+                duration: 100,
                 // Make it take a while
             }
         ).start();
         Animated.timing(this.loginHeight, {
             toValue: SCREEN_HEIGHT / 1.5,
-            duration: 300,
+            duration: 100,
         }).start(() => {
 
 
