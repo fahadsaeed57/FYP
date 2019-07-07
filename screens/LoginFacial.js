@@ -114,7 +114,7 @@ export default class SignUpFacial extends Component{
                 let uploadResult = await uploadResponse.json();
                 if(uploadResult.isSpoofed=="False"){
                     this.setState({
-                        imagecropped: `${baseUrl}${uploadResult.base64img.data}`,
+                        imagecropped: `${baseUrl}/${uploadResult.base64img.data}`,
                         
                         normalimg:`${uploadResult.base64img.data}`
                       });
