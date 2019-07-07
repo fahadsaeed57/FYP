@@ -25,7 +25,7 @@ export default class Loader extends Component {
               style={styles.loaderImage}>
              
                
-               <Bubbles size={12} color="#9966ff" />
+               <Bubbles size={9} color="#494871" />
                
             </View>
           </View>
@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     position: 'relative',
-    left: '50%',
-    marginLeft: -40,
+    left: '64%',
+    marginLeft: -50,
     top: '50%',
     marginTop: -15,
     

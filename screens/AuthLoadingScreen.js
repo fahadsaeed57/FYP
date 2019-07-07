@@ -30,7 +30,7 @@ export default class AuthLoadingScreen extends Component{
       
           Animated.timing(this.animatedValue2, {
             toValue: 1,
-            delay: 100,
+            delay: 0,
             duration: 3000,
            useNativeDriver: true,
           }).start();
@@ -39,8 +39,8 @@ export default class AuthLoadingScreen extends Component{
         this.isCancelled = true;
     }
     loadApp = async() =>{
-        const userToken =  await AsyncStorage.getItem("userToken");
-        this.props.navigation.navigate(userToken ? 'Auth' : 'Auth')
+        const userToken =  await AsyncStorage.getItem("userData");
+        this.props.navigation.navigate(userToken ? 'App' : 'Auth')
     }
     render(){
         const truckStyle = {
@@ -52,7 +52,7 @@ export default class AuthLoadingScreen extends Component{
           };
         return(
             <LinearGradient
-                colors={['#494871', '#494871']} style={styles.container}>
+                colors={['#413661', '#413661']} style={styles.container}>
                <Animated.View style={[truckStyle]}>
           <Animated.Image
             source={require("../assets/fyplogo.png")}
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         flex :1,
         alignItems:'center',
         justifyContent : 'center',
-        backgroundColor:'#494871'
+        backgroundColor:'#413661'
     }
 
 })

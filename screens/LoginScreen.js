@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
-import { View, Text, ImageBackground, Animated, Dimensions,ScrollView, StyleSheet, Platform, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ImageBackground, Animated, Dimensions,ScrollView, Image,Alert,TextInput,StyleSheet, Platform, Keyboard, KeyboardAvoidingView,AsyncStorage } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-native-responsive-screen';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 import Icon2 from 'react-native-vector-icons/Entypo';
 import GradientButton from 'react-native-gradient-buttons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Animatable from 'react-native-animatable';
+import axios from 'axios';
 import Iconant from 'react-native-vector-icons/AntDesign';
+import Loader from '../components/Loader';
 import { LinearGradient } from 'expo';
 import { Container, Header, Button, Content, Form, Item, Input, Label, Icon } from 'native-base';
+import { baseUrl } from '../ApiUrl';
 export default class LoginScreen extends Component {
     static navigationOptions = {
         header : null
     }
+
     state = {
         margin: new Animated.Value(200),
-        marginLeft: new Animated.Value(dp('8%'))
+        marginLeft: new Animated.Value(dp('8%')),
+        enrollment_num:'',
+        password:'',
+        isLoading:false,
+        student:''
+
     }
     componentWillMount() {
         this.loginHeight = new Animated.Value(50)
@@ -51,8 +60,64 @@ export default class LoginScreen extends Component {
             }
         ).start();                        // Starts the animation
     }
-    increaseHeightOfLogin = () => {
+    componentWillUnmount(){
+        Keyboard.removeAllListeners();
+    }
+    _focusNextField(nextField) {
+        this.refs[nextField]._root.focus()
+        }
 
+        loginStudent = async ()=>{
+            Keyboard.dismiss();
+         const datatopost = {
+                enrollment_num:this.state.enrollment_num,
+                password:this.state.password
+            
+            }
+            if(this.state.enrollment_num!="" && this.state.password!=""){
+                this.setState({isLoading:true});
+                axios.post(`${baseUrl}:5000/student/login`,datatopost).then(res => {
+                    const data = res.data.student;
+                    if(data!=null){
+                        this.setState({student: data[0] , isLoading:false});
+                        // alert(JSON.stringify(data[0]));
+                        if(data[0].encoded_face_img==null || data[0].encoded_face_img==""){
+                            this.props.navigation.navigate('LoginFacial',this.state.student)
+                        }
+                        else{
+                            try {
+                            AsyncStorage.setItem('userData', JSON.stringify(data[0]));
+                            this.props.navigation.navigate('App');
+                         } catch (error) {
+                           // Error saving data
+                         }
+                        }
+                        
+                        
+                       
+                    }
+                    else{
+                        this.setState({isLoading:false},Alert.alert(" Error ","Incorrect password or enrollment number"));
+                        
+                    }
+                   
+                    
+                }).catch(error => {
+                   this.setState({ isLoading: false })
+                    Alert.alert(" Error ","Some Thing went wrong please check your internet connection")
+                    
+                  })
+            }
+            else{
+                Alert.alert(" Error ","Fill Empty Details");
+            }
+           
+                
+    
+          }
+        
+    increaseHeightOfLogin = () => {
+        this.refs['enrollmentnumber']._root.focus()
         Animated.timing(                  // Animate over time
             this.state.marginLeft,            // The animated value to drive
             {
@@ -61,7 +126,7 @@ export default class LoginScreen extends Component {
             }
         ).start();
         Animated.timing(this.loginHeight, {
-            toValue: SCREEN_HEIGHT / 1.75,
+            toValue: SCREEN_HEIGHT / 1.8,
             duration: 100,
         }).start(() => {
 
@@ -86,9 +151,7 @@ export default class LoginScreen extends Component {
 
         })
     }
-    componentWillUnmount(){
-        Keyboard.removeAllListeners();
-    }
+    
     render() {
         const marginTop = this.loginHeight.interpolate({
             inputRange: [150, SCREEN_HEIGHT],
@@ -116,7 +179,7 @@ export default class LoginScreen extends Component {
             
             
             <LinearGradient
-                colors={['#494871', '#494871']} style={styles.container}>
+                colors={['#413661', '#413661']} style={styles.container}>
                 {/* <ImageBackground source={require('../assets/bg.jpg')}  style={{height:hp('100%'),width:dp('100%'),opacity:0.8}}> */}
                 <Animated.View style={{
                     flex: 1,
@@ -125,7 +188,17 @@ export default class LoginScreen extends Component {
                     justifyContent: 'center',
                     marginTop: this.state.margin,
                 }}>
-                    <Text style={{ color: 'white', fontSize: 40, fontWeight: 'bold' }} >ATTENDEE</Text>
+                <Image
+            source={require("../assets/fyplogo.png")}
+            style={[
+              {
+                resizeMode: "contain",
+                width: 150,
+                height: 150
+              }
+            ]}
+          />
+                    {/* <Text style={{ color: 'white', fontSize: 40, fontWeight: 'bold' }} >ATTENDEE</Text> */}
                 </Animated.View>
                 
 
@@ -166,10 +239,32 @@ export default class LoginScreen extends Component {
                             
                             <Animated.View style={{ margin: 10, alignItems: 'center', justifyContent:'center',opacity: barOpacity, width: dp('90%'), position: 'absolute' }}>
                             
-                                <Item>
+                            <Item>
                                     <Icon active name='person' />
-                                    <Input placeholder='university ID' />
+                                    <Input
+              placeholder='Enrollment Number'
+              onSubmitEditing={() => this._focusNextField('password')}
+              returnKeyType = {"next"}
+              ref="enrollmentnumber"
+              blurOnSubmit={false}
+              onChangeText={enrollment_num => this.setState({enrollment_num: enrollment_num})}
+              
+            />
+
+
+                                
+                               
                                 </Item>
+                                    <Item>
+                                    <Icon active name='key' />
+                                    <Input placeholder='password'  
+                                
+                                
+                                ref="password"
+                                onChangeText={password=> this.setState({password: password})}
+              />
+                                </Item>
+                                  
                         
                                 
                                 <Animated.View  style={{opacity:signUpOpacity,width:dp('90%'),zIndex:signUpOpacity,alignItems:'center'}}>
@@ -177,15 +272,12 @@ export default class LoginScreen extends Component {
                                     <Icon active name='person' />
                                     <Input placeholder='university ID' />
                                 </Item>
-                                <Item>
-                                    <Icon active name='key' />
-                                    <Input placeholder='password' />
-                                </Item>
+                               
                                 <GradientButton
-                                    style={{ marginVertical: 8,marginTop:20 }}
+                                    style={{ marginVertical: 8,marginTop:30 }}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#494871"
-                                    gradientEnd="#494871"
+                                    gradientBegin="#413661"
+                                    gradientEnd="#413661"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
@@ -197,16 +289,17 @@ export default class LoginScreen extends Component {
 
                                 </Animated.View>
                                 <Animated.View style={{opacity:signInOpacity,position:'absolute',zIndex:signInOpacity,paddingTop:50}}>
+                                <Text> {"\n\n\n"}</Text>
                                 <GradientButton
-                                    style={{ marginVertical: 8 }}
+                                    style={{ marginVertical: 8 ,marginTop:10}}
                                     textSyle={{ fontSize:5 }}
-                                    gradientBegin="#494871"
-                                    gradientEnd="#494871"
+                                    gradientBegin="#413661"
+                                    gradientEnd="#413661"
                                     gradientDirection="diagonal"
                                     height={60}
                                     width={200}
                                     radius={30}
-                                    onPressAction={() => {Keyboard.dismiss(); this.props.navigation.navigate('LoginFacial') ;}}
+                                    onPressAction={() => {this.loginStudent()}}
                                 >
                                    <Text style={{fontSize:17}}> LOGIN</Text>
                                 </GradientButton>
@@ -240,9 +333,12 @@ export default class LoginScreen extends Component {
                     </Animated.View>
 
 
-                
+                { this.state.isLoading && <Loader
+                            modalVisible={this.state.isLoading}
+                            animationType="slide"
+                        /> }
 
-                    {/* </ImageBackground>    */}
+                   
             </LinearGradient>
            
 

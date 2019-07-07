@@ -6,12 +6,16 @@ import { heightPercentageToDP as hp, widthPercentageToDP as dp } from 'react-nat
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Loader from '../components/Loader';
 import GradientButton from 'react-native-gradient-buttons';
+import axios from 'axios';
+import {baseUrl} from '../ApiUrl';
 export default class SignUpFacial extends Component{
     state = {
         image: null,
         hasCameraPermission: null,
         isLoading:false,
         imagecropped : null,
+        normalimg:null
+    
       };
     constructor(props){
         super(props);
@@ -22,12 +26,14 @@ export default class SignUpFacial extends Component{
         this.setState({ hasCameraPermission: status === 'granted' });
       }
     
+      
+      
     
     _pickImage = async () => {
         let result = await ImagePicker.launchCameraAsync({
           allowsEditing: true,
           aspect: [4, 4],
-          quality:0.4,
+          quality:0.1,
 
         });
     
@@ -50,7 +56,7 @@ export default class SignUpFacial extends Component{
       }
        uploadImageAsync = async (uri,faceobject)=> {
         
-        let apiUrl = 'https://pythonface.herokuapp.com/upload';
+        let apiUrl = `${baseUrl}/upload`;
         let uriParts = uri.split('.');
         let fileType = uriParts[uriParts.length - 1];
       
@@ -106,11 +112,18 @@ export default class SignUpFacial extends Component{
                 
                  let uploadResponse = await this.uploadImageAsync(this.state.image,detected.faces[0]);
                 let uploadResult = await uploadResponse.json();
-                
-                  this.setState({
-                    imagecropped: `data:image/jpg;base64,${uploadResult.base64img.data}`
-                  });
-                console.log(JSON.stringify(uploadResult.base64img.data));
+                if(uploadResult.isSpoofed=="False"){
+                    this.setState({
+                        imagecropped: `${baseUrl}${uploadResult.base64img.data}`,
+                        
+                        normalimg:`${uploadResult.base64img.data}`
+                      });
+                    // alert(JSON.stringify(uploadResult.base64img.data));
+                }
+                else{
+                    Alert.alert('Error','Looks like you are trying to fake me , eh?');
+                }
+                  
               } catch (e) {
                 
                 console.log({ e });
@@ -124,6 +137,42 @@ export default class SignUpFacial extends Component{
             // Alert.alert( 'Face Position',''+ JSON.stringify(detected.faces[0]))
         }
       }
+      completeRegistration(){
+        const { navigation } = this.props;
+        
+        let datatopost2 = {
+        encoded_base64img: this.state.normalimg,
+        enrollment_num: navigation.getParam('enrollment_num', 'NO-ID'),
+        password: navigation.getParam('password', 'NO-ID')
+        }
+    //   alert(JSON.stringify(datatopost2))
+        
+        this.setState({ isLoading: true });
+        axios.post(`${baseUrl}:5000/student/update/image`, datatopost2).then(res => {
+          const data = res.data;
+            if(data.message){
+                this.setState({  isLoading: false })
+                try {
+                    AsyncStorage.setItem('userData', JSON.stringify(datatopost2));
+                    this.props.navigation.navigate('App');
+                 } catch (error) {
+                   // Error saving data
+                 }
+                 
+               
+            }
+          
+          // alert(JSON.stringify(data));
+    
+    
+    
+    
+        }).catch(error => {
+            console.log(error)
+            this.setState({ isLoading: false },Alert.alert(" Error ","Some Thing went wrong please check your internet connection"));
+          // ToastAndroid.show('Some thing went wrong', ToastAndroid.LONG);
+        })
+      }
      
     render(){
         let { image ,hasCameraPermission,imagecropped} = this.state;
@@ -133,12 +182,12 @@ export default class SignUpFacial extends Component{
 
           return (
             <LinearGradient
-            colors={['#494871', '#494871']}  style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
+            colors={['#413661', '#413661']}  style={styles.container}> <Text>No access to camera</Text> </LinearGradient>);
           } else {
         if(image !=null && imagecropped == null){
             return (
                 <LinearGradient
-                colors={['#494871', '#494871']}  style={styles.container}>
+                colors={['#413661', '#413661']}  style={styles.container}>
                     <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
                     <Image source={{ uri: image }} style={{ width: dp('90%'), height: hp('40%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
                     <GradientButton
@@ -152,7 +201,7 @@ export default class SignUpFacial extends Component{
                                     radius={30}
                                     onPressAction={() => {  this.onDetect() ;}}
                                 >
-                                   <Text style={{fontSize:17}}> DETECT FACE </Text>
+                                   <Text style={{fontSize:10}}> DETECT FACE </Text>
                                 </GradientButton>
                                 <GradientButton
                                     style={{ marginVertical: 8,marginTop:20 }}
@@ -165,7 +214,7 @@ export default class SignUpFacial extends Component{
                                     radius={30}
                                     onPressAction={() => {  this._pickImage() ;}}
                                 >
-                                   <Text style={{fontSize:17}}> CHANGE PICTURE </Text>
+                                   <Text style={{fontSize:10}}> CHANGE PICTURE </Text>
                                 </GradientButton>
                     </View>
                     { this.state.isLoading && <Loader
@@ -179,9 +228,26 @@ export default class SignUpFacial extends Component{
             return (
                 <LinearGradient
                 colors={['#494871', '#494871']}  style={styles.container}>
-                <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('70%'),alignItems:'center'}}>
-                <Image source={{ uri: imagecropped }} style={{ width: dp('90%'), height: hp('60%'),borderTopLeftRadius:20,borderTopRightRadius:20 }}/>
+                <View style={{backgroundColor:'white',borderRadius:20,width: dp('90%'), height: hp('30%'),alignItems:'center',position:'relative'}}>
+                <Image source={{ uri: imagecropped }} style={{ width: 100, height:100,borderRadius:50,position:'absolute',zIndex:100,marginTop:-50 }}/>
+                <GradientButton
+                                    style={{ marginVertical: 8,marginTop:70 }}
+                                    textSyle={{ fontSize:5 }}
+                                    gradientBegin="#494871"
+                                    gradientEnd="#494871"
+                                    gradientDirection="diagonal"
+                                    height={50}
+                                    width={200}
+                                    radius={30}
+                                    onPressAction={() => {  this.completeRegistration()}}
+                                >
+                                   <Text style={{fontSize:10}}> Complete Registration </Text>
+                                </GradientButton>
                 </View>
+                { this.state.isLoading && <Loader
+                            modalVisible={this.state.isLoading}
+                            animationType="slide"
+                        /> }
                 </LinearGradient>
             )
         }
