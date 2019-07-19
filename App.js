@@ -9,6 +9,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import HomeScreen from './screens/HomeScreen';
 import AccountInfo  from './screens/AccountInfo';
+import Home from './screens/home'
+import FacialRecogntion from './screens/FaceRecogntion'
+import Courses from './screens/courses'
+import QRcode from './screens/QrCode';
+import AttendanceMarked from './screens/AttendanceMarked';
 let AppScenes = {
    LoginScreen : {
      screen : LoginScreen
@@ -46,7 +51,9 @@ let AppScenes = {
  });
  const AppTabNavigator = createBottomTabNavigator(
   {
-    Home: HomeScreen,
+    // Home: HomeScreen,
+    Home: Home,
+
     Profile: AccountInfo,
 
   },
@@ -80,8 +87,8 @@ let AppScenes = {
   });
  const AppStackNavigator = createStackNavigator({
   AppTabNavigator:{
-    screen:AppTabNavigator
-    ,
+    screen:AppTabNavigator,
+    
     transitionConfig: () => fromLeft(300),
     
     navigationOptions:({ navigation }) =>({
@@ -107,7 +114,12 @@ let AppScenes = {
       ,
     })
     ,
-  }
+  },
+   FacialRecogntion:FacialRecogntion,
+  Courses:Courses,
+  QRcode : QRcode,
+  "AttendanceMarked":AttendanceMarked
+
 
 },{
   transitionConfig: () => fromLeft(300),
