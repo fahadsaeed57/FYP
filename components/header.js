@@ -162,13 +162,14 @@ class Header extends Component {
               <Image source={{uri:baseUrl+"/"+student.encoded_face_img}} style={styles.avatar} />
             </View>
             <View style={[styles.column, { flex: 2, paddingHorizontal: theme.sizes.padding / 2 }]}>
-              <Text style={{ color: theme.colors.white, fontWeight: 'bold', fontSize:Fonts.moderateScale(15),paddingVertical:5}}>{student.student_name}</Text>
+              <Text style={{ color: theme.colors.white, fontWeight: 'bold', fontSize:Fonts.moderateScale(10),paddingVertical:5}}>{student.student_name}</Text>
               
             </View>
             <View style={{ flex: 0, justifyContent: 'center', alignItems: 'flex-end', }}>
-              <Text style={{fontSize:Fonts.moderateScale(20),color: theme.colors.white,
+              <Text style={{fontSize:Fonts.moderateScale(15),color: theme.colors.white,
     fontWeight: 'bold'}}>75%</Text>
             </View>
+            <Text> {"\n"}</Text>
           </View>
           <View style={[styles.column, styles.destinationInfo, styles.shadow]}>
             <Text style={{ fontSize: theme.sizes.font * 1.25, fontWeight: '500', paddingBottom: 8, }}>

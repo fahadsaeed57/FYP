@@ -10,7 +10,7 @@ import {
 
 
 import { Block, Text } from "../components/CoursesComponentsfromIBLOODapp";
-
+import baseUrl from '../ApiUrl';
 import * as theme from "../constants/constantsfromIBLOODAPP/theme";
 import * as mocks from "../constants/constantsfromIBLOODAPP/mocks";
 import Header from  '../components/header'
@@ -54,7 +54,8 @@ import Header from  '../components/header'
               COURSES
             </Text>
           </Block>
-          <Image style={styles.avatar} source={user.avatar} />
+          <Image source={{uri:baseUrl+"/"+this.state.student.encoded_face_img}}
+              style={styles.avatar} />
         </Block>
         <Block card shadow color="white" style={styles.headerChart}>
           <Block row space="between" style={{ paddingHorizontal: 30 }}>

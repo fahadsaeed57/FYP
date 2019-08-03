@@ -38,7 +38,7 @@ class Home extends Component {
     try {
       const value = await AsyncStorage.getItem('userData');
       this.setState({student:JSON.parse(value)});
-      console.log(baseUrl)
+      console.log(this.state.student);
       
      } catch (error) {
        alert(error);

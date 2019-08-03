@@ -140,6 +140,7 @@ export default class FaceRecognition extends Component{
                         
                         normalimg:`${uploadResult.base64img.data}`
                       });
+                      console.log(this.state);
                     // alert(JSON.stringify(uploadResult.base64img.data));
                 }
                 else{

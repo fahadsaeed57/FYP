@@ -1,4 +1,4 @@
-const baseUrl = "http://35.227.110.252"
+const baseUrl = "http://34.74.151.200"
 
 
 export {baseUrl}
