@@ -102,7 +102,7 @@ export default class QRcode extends React.Component {
       Vibration.vibrate(100);
     console.log(this.state)
         let datatopost2={
-            attendance_id : data,
+            attendance_id : Number(data),
             student_id:navigation.getParam('student_id', 'NO-ID'),
             lat:this.state.location.coords.latitude,
             log:this.state.location.coords.longitude
@@ -139,6 +139,9 @@ export default class QRcode extends React.Component {
           // alert(JSON.stringify(data));
       
 
+    }
+    if(this.state.location==null){
+        alert("Looks like your location is not fetched correctly try again!")
     }
 
 

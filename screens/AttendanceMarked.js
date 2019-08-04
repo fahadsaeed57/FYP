@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, View ,Dimensions,ScrollView} from 'react-native';
+import { Button, StyleSheet, View ,Dimensions,ScrollView,Image} from 'react-native';
 import { DangerZone , MapView} from 'expo';
 const { Lottie } = DangerZone;
 import { Block, Text } from "../components/CoursesComponentsfromIBLOODapp";
@@ -16,7 +16,7 @@ export default class AttendanceMarked extends React.Component {
   };
   
   componentWillMount() {
-    this._playAnimation();
+    // this._playAnimation();
   
   }
    distance(lat1, lon1, lat2, lon2, unit) {
@@ -54,39 +54,8 @@ export default class AttendanceMarked extends React.Component {
           onPress={this._playAnimation}
         /> */}
         <Block row card shadow  color="#494871"  style={styles.request}>
-        {/* <Block
-          flex={0.25}
-          card
-          column
-          color="secondary"
-          style={styles.requestStatus}
-          
-        >
-          <Block flex={0.25} middle center color="#494871">
-            <Text small white style={{ textTransform: "uppercase" }}>
-              3creditHours
-            </Text>
-          </Block>
-          <Block flex={0.7} center middle>
-            <Text h2 white>
-              1
-            </Text>
-          </Block>
-        </Block> */}
-        {this.state.animation &&
-          <Lottie
-            ref={animation => {
-              this.animation = animation;
-            }}
-            style={{
-              width: width*0.4,
-              height: height * 0.3,
-              justifyContent:'center',
-              alignItems:'center'
-
-            }}
-            source={this.state.animation}
-          />}
+        <Image style={{width:50,height:50}}source={{uri:`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data.attendance_details.attendance_id}`}} />
+       
         <Block flex={1} column middle>
           <Text white h3 style={{ paddingVertical: 8, }}>{data.attendance_details.course_name}</Text>
           <Text white caption semibold>
@@ -135,25 +104,25 @@ export default class AttendanceMarked extends React.Component {
     );
   }
   
-  _playAnimation = () => {
-    if (!this.state.animation) {
-      this._loadAnimationAsync();
-    } else {
-      this.animation.reset();
-      this.animation.play();
-    }
-  };
+  // _playAnimation = () => {
+  //   if (!this.state.animation) {
+  //     this._loadAnimationAsync();
+  //   } else {
+  //     this.animation.reset();
+  //     this.animation.play();
+  //   }
+  // };
 
-  _loadAnimationAsync = async () => {
-    let result = await fetch(
-      'https://assets2.lottiefiles.com/packages/lf20_g8SKoA.json'
-    );
+  // _loadAnimationAsync = async () => {
+  //   let result = await fetch(
+  //     'https://assets2.lottiefiles.com/packages/lf20_g8SKoA.json'
+  //   );
 
-    this.setState(
-      { animation: JSON.parse(result._bodyText) },
-      this._playAnimation
-    );
-  };
+  //   this.setState(
+  //     { animation: JSON.parse(result._bodyText) },
+  //     this._playAnimation
+  //   );
+  // };
 }
 
 const styles = StyleSheet.create({
